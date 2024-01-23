@@ -3,6 +3,7 @@ import (
     "os"
     "log"
     "fmt"
+    "net/http" 
 )
 var path = ""
 func main() {
@@ -13,9 +14,7 @@ func main() {
         log.Fatal(err)
     }
     fmt.Println(path)
-    listDirectories(path)
-    path = changeDirectory(path,"newFolder")
-    listDirectories(path)
-    b := []byte("Hello world!")
-    saveFile("helloworld.txt",b)
+
+    fs := http.FileServer(http.Dir(path))
+    log.Fatal(http.ListenAndServe(":8000",fs))
 }
