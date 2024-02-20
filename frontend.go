@@ -19,8 +19,24 @@ func startServer() {
 }
 
 func initRoutes() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/"+path, func(w http.ResponseWriter, r *http.Request) {
 		file, err := os.Open("index.html")
+		if err != nil {
+			log.Fatal(err)
+		}
+		content, err := io.ReadAll(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Write(content)
+	})
+	createPath("signup", "signup.html")
+	createPath("login", "login.html")
+}
+
+func createPath(path string, file string) {
+	http.HandleFunc("/"+path, func(w http.ResponseWriter, r *http.Request) {
+		file, err := os.Open(file)
 		if err != nil {
 			log.Fatal(err)
 		}
